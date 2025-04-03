@@ -1,0 +1,52 @@
+[
+  {
+    "aggression": 0.16383403850775918,
+    "repulsion": 0.2516788051335811,
+    "commitment": 12
+  },
+  {
+    "aggression": 0.15844416086564497,
+    "repulsion": 0.2516788051335811,
+    "commitment": 12
+  },
+  {
+    "aggression": 0.12927586085337675,
+    "repulsion": 0.2516788051335811,
+    "commitment": 46
+  },
+  {
+    "aggression": 0.16383403850775918,
+    "repulsion": 0.29330312658506985,
+    "commitment": 46
+  },
+  {
+    "aggression": 0.15844416086564497,
+    "repulsion": 0.2516788051335811,
+    "commitment": 46
+  },
+  {
+    "aggression": 0.16383403850775918,
+    "repulsion": 0.2516788051335811,
+    "commitment": 45
+  },
+  {
+    "aggression": 0.15844416086564497,
+    "repulsion": 0.25989628007587945,
+    "commitment": 12
+  },
+  {
+    "aggression": 0.16383403850775918,
+    "repulsion": 0.29330312658506985,
+    "commitment": 12
+  },
+  {
+    "aggression": 0.16383403850775918,
+    "repulsion": 0.2516788051335811,
+    "commitment": 46
+  },
+  {
+    "aggression": 0.16383403850775918,
+    "repulsion": 0.2516788051335811,
+    "commitment": 12
+  }
+]
