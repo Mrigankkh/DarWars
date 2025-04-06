@@ -1,6 +1,6 @@
 import pygame
 from constants import *
-
+import sys
 def show_game_over(screen, victory, font, large_font, generation, enemies_defeated):
     screen.fill(BLACK)
     title = "VICTORY!" if victory else "GAME OVER"

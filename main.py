@@ -1,12 +1,13 @@
 import pygame
-import sys
+import random
+import math
 from constants import *
 from player import Player
-from enemy import Enemy
+from enemy import ( Enemy)
 from genetic_algorithm import evolve_population
-from ui import show_generation_summary, show_game_over, show_info_overlay, show_enemy_info
+from ui import (show_generation_summary, show_game_over, show_info_overlay, show_enemy_info)
 from menu import show_main_menu, show_help_screen, show_settings_screen
-
+from visibility.visibility_logger import log_generation
 # Initialize pygame
 pygame.init()
 
@@ -15,8 +16,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Adaptive Enemy AI - Genetic Algorithm")
 
 # Font settings
-font = pygame.font.SysFont('Arial', 20)
-large_font = pygame.font.SysFont('Arial', 40)
+font = pygame.font.SysFont('Arial', 16)
+large_font = pygame.font.SysFont('Arial', 20)
 
 # Global game variables
 generation = 1
@@ -41,25 +42,21 @@ def main():
     running = True
     game_state = "playing"
     
-    # Initialize player and enemies
+  
     player = Player(screen)
     enemies = [Enemy(screen) for _ in range(population_size)]
     current_enemies = len(enemies)
     
     selected_enemy = None
     
-    # Special weapon message variables
     special_message = ""
     special_message_time = 0
     
-    # Main game loop
     while running:
-        # Handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                # Check if clicked on an enemy to select it
                 mouse_pos = pygame.mouse.get_pos()
                 for enemy in enemies:
                     if (enemy.alive and
@@ -114,7 +111,7 @@ def main():
             alive_enemies = [enemy for enemy in enemies if enemy.alive]
             for enemy in alive_enemies:
                 enemy.time_alive += 1
-                enemy.move(player)
+                enemy.move(player, alive_enemies)  # Pass all enemies for group behavior
                 enemy.shoot(player)
                 enemy.update_bullets(player)
                 enemy.draw()
@@ -147,10 +144,12 @@ def main():
                 if show_generation_summary(screen, enemies, font, large_font, generation, enemies_defeated, mutation_rate, game_difficulty):
                     # Evolve population
                     enemies = evolve_population(enemies, population_size, mutation_rate)
+                    
                     generation += 1
                     enemies_defeated += current_enemies
                     current_enemies = len(enemies)
-                    
+                    log_generation(enemies, generation)
+
                     # Reset player position and health
                     player = Player(screen)
             
@@ -164,6 +163,8 @@ def main():
                 # Reset game
                 game_state = "playing"
                 player = Player(screen)
+                # Assign a new random shooting direction
+                player.shooting_angle = random.uniform(0, 2 * math.pi)
                 enemies = [Enemy(screen) for _ in range(population_size)]
                 generation = 1
                 enemies_defeated = 0
