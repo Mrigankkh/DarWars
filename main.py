@@ -7,7 +7,8 @@ from enemy import ( Enemy)
 from genetic_algorithm import evolve_population
 from ui import (show_generation_summary, show_game_over, show_info_overlay, show_enemy_info)
 from menu import show_main_menu, show_help_screen, show_settings_screen
-from visibility.visibility_logger import log_generation
+#
+# from visibility.visibility_logger import log_generation
 # Initialize pygame
 pygame.init()
 
@@ -148,7 +149,7 @@ def main():
                     generation += 1
                     enemies_defeated += current_enemies
                     current_enemies = len(enemies)
-                    log_generation(enemies, generation)
+                    #log_generation(enemies, generation)
 
                     # Reset player position and health
                     player = Player(screen)
