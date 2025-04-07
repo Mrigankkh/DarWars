@@ -12,6 +12,11 @@ from menu import show_main_menu, show_help_screen, show_settings_screen
 # Initialize pygame
 pygame.init()
 
+screen = pygame.display.set_mode((800, 600))
+screen.fill((255, 0, 255))  # HOT PINK
+pygame.display.flip()
+
+print("Draw test ran successfully.")
 # Screen settings
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Adaptive Enemy AI - Genetic Algorithm")
