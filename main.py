@@ -90,7 +90,7 @@ def main():
         
         if game_state == "playing":
             # Clear screen
-            screen.fill(BLACK)
+            #screen.fill(BLACK)
             
             # Get keyboard state
             keys = pygame.key.get_pressed()
