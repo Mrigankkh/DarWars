@@ -194,18 +194,13 @@ from ui import (
 )
 from menu import show_main_menu, show_help_screen, show_settings_screen
 
-# Initialize pygame
 pygame.init()
-
-# Screen settings
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Adaptive Enemy AI - Genetic Algorithm")
 
-# Font settings
 font = pygame.font.SysFont('Arial', 16)
 large_font = pygame.font.SysFont('Arial', 20)
 
-# Global game variables
 generation = 1
 population_size = 10
 current_enemies = 0
@@ -228,6 +223,8 @@ async def main():
     running = True
     game_state = "playing"
 
+    clock = pygame.time.Clock()
+
     player = Player(screen)
     enemies = [Enemy(screen) for _ in range(population_size)]
     current_enemies = len(enemies)
@@ -236,24 +233,20 @@ async def main():
     special_message = ""
     special_message_time = 0
 
-    clock = pygame.time.Clock()
-
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 for enemy in enemies:
                     if (enemy.alive and
-                        mouse_pos[0] >= enemy.x and mouse_pos[0] <= enemy.x + enemy.width and
-                        mouse_pos[1] >= enemy.y and mouse_pos[1] <= enemy.y + enemy.height):
+                        enemy.x <= mouse_pos[0] <= enemy.x + enemy.width and
+                        enemy.y <= mouse_pos[1] <= enemy.y + enemy.height):
                         selected_enemy = enemy
                         break
                 else:
                     selected_enemy = None
-
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
@@ -266,18 +259,73 @@ async def main():
                 elif event.key == pygame.K_MINUS:
                     game_difficulty = max(1, game_difficulty - 1)
 
-        # Game logic and drawing should go here
-        screen.fill((0, 0, 0))
-        player.draw()
-        for enemy in enemies:
-            enemy.draw()
+        if game_state == "playing":
+            screen.fill(BLACK)
 
-        pygame.display.flip()
-        await asyncio.sleep(0)  # Important for browser compatibility
-        clock.tick(60)
+            keys = pygame.key.get_pressed()
+
+            player.move(keys)
+            player.shoot(keys)
+            player.update_bullets(enemies)
+
+            if (keys[pygame.K_f] or keys[pygame.K_q]) and player.has_special_weapon:
+                enemies_destroyed = player.use_special_weapon(enemies)
+                if enemies_destroyed > 0:
+                    special_message = f"Ring of Fire destroyed {enemies_destroyed} enemies!"
+                    special_message_time = 120
+
+            player.update_special_weapon()
+            player.draw()
+
+            alive_enemies = [enemy for enemy in enemies if enemy.alive]
+            for enemy in alive_enemies:
+                enemy.time_alive += 1
+                enemy.move(player, alive_enemies)
+                enemy.shoot(player)
+                enemy.update_bullets(player)
+                enemy.draw()
+
+            if selected_enemy and selected_enemy.alive:
+                mouse_pos = pygame.mouse.get_pos()
+                show_enemy_info(screen, selected_enemy, mouse_pos, font)
+
+            show_info_overlay(screen, player, enemies, font, generation)
+
+            if special_message_time > 0:
+                message_text = font.render(special_message, True, YELLOW)
+                screen.blit(message_text, (SCREEN_WIDTH // 2 - message_text.get_width() // 2, 100))
+                special_message_time -= 1
+
+            if not player.alive:
+                game_state = "game_over"
+
+            if not alive_enemies:
+                for enemy in enemies:
+                    enemy.calculate_fitness()
+
+                if show_generation_summary(screen, enemies, font, large_font, generation, enemies_defeated, mutation_rate, game_difficulty):
+                    enemies = evolve_population(enemies, population_size, mutation_rate)
+                    generation += 1
+                    enemies_defeated += current_enemies
+                    current_enemies = len(enemies)
+                    player = Player(screen)
+
+            pygame.display.flip()
+            await asyncio.sleep(0)  # Yield to browser
+            clock.tick(FPS)
+
+        elif game_state == "game_over":
+            if show_game_over(screen, False, font, large_font, generation, enemies_defeated):
+                game_state = "playing"
+                player = Player(screen)
+                player.shooting_angle = random.uniform(0, 2 * math.pi)
+                enemies = [Enemy(screen) for _ in range(population_size)]
+                generation = 1
+                enemies_defeated = 0
+                current_enemies = len(enemies)
 
     pygame.quit()
 
-# Local run support
 if __name__ == "__main__":
+    show_main_menu(screen, mutation_rate, game_difficulty, font, large_font)
     asyncio.run(main())
