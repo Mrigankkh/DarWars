@@ -177,150 +177,107 @@
 # if __name__ == "__main__":
 #     show_main_menu(screen, mutation_rate, game_difficulty, font, large_font)
 #     main()
-# import pygame
-# import random
-# import math
-# import asyncio
-
-# from constants import *
-# from player import Player
-# from enemy import Enemy
-# from genetic_algorithm import evolve_population
-# from ui import (
-#     show_generation_summary,
-#     show_game_over,
-#     show_info_overlay,
-#     show_enemy_info
-# )
-# from menu import show_main_menu, show_help_screen, show_settings_screen
-
-# # Initialize pygame
-# pygame.init()
-
-# # Screen settings
-# screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-# pygame.display.set_caption("Adaptive Enemy AI - Genetic Algorithm")
-
-# # Font settings
-# font = pygame.font.SysFont('Arial', 16)
-# large_font = pygame.font.SysFont('Arial', 20)
-
-# # Global game variables
-# generation = 1
-# population_size = 10
-# current_enemies = 0
-# enemies_defeated = 0
-# mutation_rate = 0.1
-# game_difficulty = 1
-
-# def reset_game():
-#     global generation, enemies_defeated, current_enemies
-#     generation = 1
-#     enemies_defeated = 0
-#     current_enemies = 0
-#     player = Player(screen)
-#     enemies = [Enemy(screen) for _ in range(population_size)]
-#     return player, enemies
-
-# async def main():
-#     global generation, enemies_defeated, current_enemies, mutation_rate, game_difficulty
-
-#     running = True
-#     game_state = "playing"
-
-#     player = Player(screen)
-#     enemies = [Enemy(screen) for _ in range(population_size)]
-#     current_enemies = len(enemies)
-
-#     selected_enemy = None
-#     special_message = ""
-#     special_message_time = 0
-
-#     clock = pygame.time.Clock()
-
-#     while running:
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 running = False
-
-#             elif event.type == pygame.MOUSEBUTTONDOWN:
-#                 mouse_pos = pygame.mouse.get_pos()
-#                 for enemy in enemies:
-#                     if (enemy.alive and
-#                         mouse_pos[0] >= enemy.x and mouse_pos[0] <= enemy.x + enemy.width and
-#                         mouse_pos[1] >= enemy.y and mouse_pos[1] <= enemy.y + enemy.height):
-#                         selected_enemy = enemy
-#                         break
-#                 else:
-#                     selected_enemy = None
-
-#             elif event.type == pygame.KEYDOWN:
-#                 if event.key == pygame.K_ESCAPE:
-#                     running = False
-#                 elif event.key == pygame.K_m:
-#                     mutation_rate = min(1.0, mutation_rate + 0.1)
-#                 elif event.key == pygame.K_n:
-#                     mutation_rate = max(0.0, mutation_rate - 0.1)
-#                 elif event.key in (pygame.K_PLUS, pygame.K_EQUALS):
-#                     game_difficulty = min(3, game_difficulty + 1)
-#                 elif event.key == pygame.K_MINUS:
-#                     game_difficulty = max(1, game_difficulty - 1)
-
-#         # Game logic and drawing should go here
-#         screen.fill((0, 0, 0))
-#         player.draw()
-#         for enemy in enemies:
-#             enemy.draw()
-
-#         pygame.display.flip()
-#         await asyncio.sleep(0)  # Important for browser compatibility
-#         clock.tick(60)
-
-#     pygame.quit()
-
-# # Local run support
-# if __name__ == "__main__":
-#     asyncio.run(main())
 import pygame
+import random
+import math
 import asyncio
 
-WIDTH, HEIGHT = 640, 480
-SQUARE_SIZE = 50
+from constants import *
+from player import Player
+from enemy import Enemy
+from genetic_algorithm import evolve_population
+from ui import (
+    show_generation_summary,
+    show_game_over,
+    show_info_overlay,
+    show_enemy_info
+)
+from menu import show_main_menu, show_help_screen, show_settings_screen
+
+# Initialize pygame
+pygame.init()
+
+# Screen settings
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Adaptive Enemy AI - Genetic Algorithm")
+
+# Font settings
+font = pygame.font.SysFont('Arial', 16)
+large_font = pygame.font.SysFont('Arial', 20)
+
+# Global game variables
+generation = 1
+population_size = 10
+current_enemies = 0
+enemies_defeated = 0
+mutation_rate = 0.1
+game_difficulty = 1
+
+def reset_game():
+    global generation, enemies_defeated, current_enemies
+    generation = 1
+    enemies_defeated = 0
+    current_enemies = 0
+    player = Player(screen)
+    enemies = [Enemy(screen) for _ in range(population_size)]
+    return player, enemies
 
 async def main():
-    pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Minimal Pygbag Test")
-    clock = pygame.time.Clock()
+    global generation, enemies_defeated, current_enemies, mutation_rate, game_difficulty
 
-    x, y = WIDTH // 2, HEIGHT // 2
-    speed = 5
     running = True
+    game_state = "playing"
+
+    player = Player(screen)
+    enemies = [Enemy(screen) for _ in range(population_size)]
+    current_enemies = len(enemies)
+
+    selected_enemy = None
+    special_message = ""
+    special_message_time = 0
+
+    clock = pygame.time.Clock()
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_ESCAPE]:
-            running = False
-        if keys[pygame.K_LEFT]:
-            x -= speed
-        if keys[pygame.K_RIGHT]:
-            x += speed
-        if keys[pygame.K_UP]:
-            y -= speed
-        if keys[pygame.K_DOWN]:
-            y += speed
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                for enemy in enemies:
+                    if (enemy.alive and
+                        mouse_pos[0] >= enemy.x and mouse_pos[0] <= enemy.x + enemy.width and
+                        mouse_pos[1] >= enemy.y and mouse_pos[1] <= enemy.y + enemy.height):
+                        selected_enemy = enemy
+                        break
+                else:
+                    selected_enemy = None
 
-        screen.fill((30, 30, 30))
-        pygame.draw.rect(screen, (255, 0, 0), (x, y, SQUARE_SIZE, SQUARE_SIZE))
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                elif event.key == pygame.K_m:
+                    mutation_rate = min(1.0, mutation_rate + 0.1)
+                elif event.key == pygame.K_n:
+                    mutation_rate = max(0.0, mutation_rate - 0.1)
+                elif event.key in (pygame.K_PLUS, pygame.K_EQUALS):
+                    game_difficulty = min(3, game_difficulty + 1)
+                elif event.key == pygame.K_MINUS:
+                    game_difficulty = max(1, game_difficulty - 1)
+
+        # Game logic and drawing should go here
+        screen.fill((0, 0, 0))
+        player.draw()
+        for enemy in enemies:
+            enemy.draw()
+
         pygame.display.flip()
-        await asyncio.sleep(0)
+        await asyncio.sleep(0)  # Important for browser compatibility
         clock.tick(60)
 
     pygame.quit()
 
+# Local run support
 if __name__ == "__main__":
     asyncio.run(main())
