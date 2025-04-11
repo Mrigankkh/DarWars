@@ -332,9 +332,9 @@ async def main():
             # Update the display.
             pygame.display.flip()
             # Yield control to allow the browser to process events.
-            await asyncio.sleep(0)
+            await asyncio.sleep(1/FPS)
             # Frame rate control.
-            clock.tick(FPS)
+            #clock.tick(FPS)
 
         elif game_state == "game_over":
             if await show_game_over(screen, False, font, large_font, generation, enemies_defeated):
