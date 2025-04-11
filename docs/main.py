@@ -334,7 +334,7 @@ async def main():
             clock.tick(FPS)
 
         elif game_state == "game_over":
-            if show_game_over(screen, False, font, large_font, generation, enemies_defeated):
+            if await show_game_over(screen, False, font, large_font, generation, enemies_defeated):
                 game_state = "playing"
                 player = Player(screen)
                 player.shooting_angle = random.uniform(0, 2 * math.pi)
