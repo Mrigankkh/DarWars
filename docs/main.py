@@ -303,7 +303,7 @@ async def main():
                 await show_enemy_info(screen, selected_enemy, mouse_pos, font)
 
             # Overlay game info.
-            show_info_overlay(screen, player, enemies, font, generation)
+            await show_info_overlay(screen, player, enemies, font, generation)
 
             # Show a special weapon message if active.
             if special_message_time > 0:
