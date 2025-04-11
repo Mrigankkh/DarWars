@@ -162,8 +162,8 @@ async def main():
             
             # Update display
             pygame.display.flip()
-            #clock.tick(FPS)
-            await asyncio.sleep(1/FPS)
+            clock.tick(FPS)
+            #await asyncio.sleep(0)
             #clock.tick(FPS)
         
         elif game_state == "game_over":
