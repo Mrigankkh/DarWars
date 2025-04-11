@@ -8,7 +8,9 @@ from ui.utils.stat_utils import (
     calculate_bullet_distribution,
     calculate_group_dynamics,
 )
-def show_generation_summary(screen, population, font, small_font, generation, enemies_defeated, mutation_rate, game_difficulty):
+import asyncio
+
+async def show_generation_summary(screen, population, font, small_font, generation, enemies_defeated, mutation_rate, game_difficulty):
     screen.fill(BLACK)
 
     sorted_population = sorted(population, key=lambda x: x.chromosome[59], reverse=True)
@@ -84,3 +86,4 @@ def show_generation_summary(screen, population, font, small_font, generation, en
                 if event.key == pygame.K_SPACE:
                     waiting = False
                     return True  # Indicate that the user pressed SPACE to continue
+        await asyncio.sleep(0)

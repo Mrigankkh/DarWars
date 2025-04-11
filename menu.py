@@ -1,8 +1,8 @@
 import pygame
 import sys
 from constants import *
-
-def show_main_menu(screen, mutation_rate, game_difficulty, font, large_font):
+import asyncio
+async def show_main_menu(screen, mutation_rate, game_difficulty, font, large_font):
     menu_running = True
     
     menu_options = [
@@ -59,6 +59,7 @@ def show_main_menu(screen, mutation_rate, game_difficulty, font, large_font):
                         sys.exit()
         
         clock.tick(30)
+        await asyncio.sleep(0)
     
     return mutation_rate, game_difficulty
 
