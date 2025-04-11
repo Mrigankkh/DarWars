@@ -58,7 +58,7 @@ async def show_main_menu(screen, mutation_rate, game_difficulty, font, large_fon
                         pygame.quit()
                         sys.exit()
         
-        #clock.tick(30)
+        clock.tick(30)
         asyncio.sleep(0)
     
     return mutation_rate, game_difficulty
