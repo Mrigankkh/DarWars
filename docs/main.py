@@ -44,7 +44,7 @@ def reset_game():
 async def main():
     global generation, enemies_defeated, current_enemies, mutation_rate, game_difficulty
     
-    mutation_rate, game_difficulty =   show_main_menu(screen, mutation_rate, game_difficulty, font, large_font)
+    mutation_rate, game_difficulty =   await show_main_menu(screen, mutation_rate, game_difficulty, font, large_font)
 
     running = True
     game_state = "playing"
