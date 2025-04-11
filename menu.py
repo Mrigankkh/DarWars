@@ -52,8 +52,8 @@ def show_main_menu(screen, mutation_rate, game_difficulty, font, large_font):
                         menu_running = False
                     elif action == "help":
                         show_help_screen(screen, font)
-                    elif action == "settings":
-                        mutation_rate, game_difficulty = show_settings_screen(screen, mutation_rate, game_difficulty, font, large_font)
+                    # elif action == "settings":
+                    #     mutation_rate, game_difficulty = show_settings_screen(screen, mutation_rate, game_difficulty, font, large_font)
                     elif action == "quit":
                         pygame.quit()
                         sys.exit()

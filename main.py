@@ -7,6 +7,8 @@ from enemy import ( Enemy)
 from genetic_algorithm import evolve_population
 from ui import (show_generation_summary, show_game_over, show_info_overlay, show_enemy_info)
 from menu import show_main_menu, show_help_screen, show_settings_screen
+
+import asyncio
 #
 # from visibility.visibility_logger import log_generation
 # Initialize pygame
@@ -30,6 +32,8 @@ game_difficulty = 1
 
 def reset_game():
     global generation, enemies_defeated, current_enemies
+    
+
     generation = 1
     enemies_defeated = 0
     current_enemies = 0
@@ -37,9 +41,11 @@ def reset_game():
     enemies = [Enemy(screen) for _ in range(population_size)]
     return player, enemies
 
-def main():
+async def main():
     global generation, enemies_defeated, current_enemies, mutation_rate, game_difficulty
     
+    mutation_rate, game_difficulty =   show_main_menu(screen, mutation_rate, game_difficulty, font, large_font)
+
     running = True
     game_state = "playing"
     
@@ -156,7 +162,9 @@ def main():
             
             # Update display
             pygame.display.flip()
-            clock.tick(FPS)
+            #clock.tick(FPS)
+            await asyncio.sleep(0.012)
+            #clock.tick(FPS)
         
         elif game_state == "game_over":
             # Show game over screen
@@ -175,5 +183,4 @@ def main():
 
 # Start the game
 if __name__ == "__main__":
-    show_main_menu(screen, mutation_rate, game_difficulty, font, large_font)
-    main()
+    asyncio.run(main())
