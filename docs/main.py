@@ -332,7 +332,7 @@ async def main():
             # Update the display.
             pygame.display.flip()
             # Yield control to allow the browser to process events.
-            await asyncio.sleep(0.005)
+            await asyncio.sleep(0)
             # Frame rate control.
             #clock.tick(FPS)
 
