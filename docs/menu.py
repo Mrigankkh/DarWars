@@ -1,10 +1,8 @@
 import pygame
 import sys
 from constants import *
-import asyncio
-clock = pygame.time.Clock()
 
-async def show_main_menu(screen, mutation_rate, game_difficulty, font, large_font):
+def show_main_menu(screen, mutation_rate, game_difficulty, font, large_font):
     menu_running = True
     
     menu_options = [
@@ -53,18 +51,18 @@ async def show_main_menu(screen, mutation_rate, game_difficulty, font, large_fon
                     if action == "play":
                         menu_running = False
                     elif action == "help":
-                        await show_help_screen(screen, font)
+                        show_help_screen(screen, font)
                     elif action == "settings":
-                        mutation_rate, game_difficulty = await show_settings_screen(screen, mutation_rate, game_difficulty, font, large_font)
+                        mutation_rate, game_difficulty = show_settings_screen(screen, mutation_rate, game_difficulty, font, large_font)
                     elif action == "quit":
                         pygame.quit()
                         sys.exit()
         
         clock.tick(30)
-        await asyncio.sleep(0)
+    
     return mutation_rate, game_difficulty
 
-async def show_help_screen(screen, font):
+def show_help_screen(screen, font):
     help_running = True
     
     help_text = [
@@ -143,10 +141,8 @@ async def show_help_screen(screen, font):
                     help_running = False
         
         clock.tick(30)
-        await asyncio.sleep(0)
 
-
-async def show_settings_screen(screen, mutation_rate, game_difficulty, font, large_font):
+def show_settings_screen(screen, mutation_rate, game_difficulty, font, large_font):
     settings_running = True
     
     settings = [
@@ -207,7 +203,6 @@ async def show_settings_screen(screen, mutation_rate, game_difficulty, font, lar
                     settings_running = False
         
         clock.tick(30)
-        await asyncio.sleep(0)
     
     # Return updated settings
     mutation_rate = settings[0]["value"]
