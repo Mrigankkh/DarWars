@@ -300,7 +300,7 @@ async def main():
             # If an enemy was selected, draw its info.
             if selected_enemy and selected_enemy.alive:
                 mouse_pos = pygame.mouse.get_pos()
-                await show_enemy_info(screen, selected_enemy, mouse_pos, font)
+                show_enemy_info(screen, selected_enemy, mouse_pos, font)
 
             # Overlay game info.
             show_info_overlay(screen, player, enemies, font, generation)
