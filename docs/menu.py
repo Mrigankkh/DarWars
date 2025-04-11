@@ -1,9 +1,10 @@
 import pygame
 import sys
 from constants import *
+import asyncio
 clock = pygame.time.Clock()
 
-def show_main_menu(screen, mutation_rate, game_difficulty, font, large_font):
+async def show_main_menu(screen, mutation_rate, game_difficulty, font, large_font):
     menu_running = True
     
     menu_options = [
@@ -52,18 +53,18 @@ def show_main_menu(screen, mutation_rate, game_difficulty, font, large_font):
                     if action == "play":
                         menu_running = False
                     elif action == "help":
-                        show_help_screen(screen, font)
+                        await show_help_screen(screen, font)
                     elif action == "settings":
-                        mutation_rate, game_difficulty = show_settings_screen(screen, mutation_rate, game_difficulty, font, large_font)
+                        mutation_rate, game_difficulty = await show_settings_screen(screen, mutation_rate, game_difficulty, font, large_font)
                     elif action == "quit":
                         pygame.quit()
                         sys.exit()
         
         clock.tick(30)
-    
+        await asyncio.sleep(0)
     return mutation_rate, game_difficulty
 
-def show_help_screen(screen, font):
+async def show_help_screen(screen, font):
     help_running = True
     
     help_text = [
@@ -142,8 +143,10 @@ def show_help_screen(screen, font):
                     help_running = False
         
         clock.tick(30)
+        await asyncio.sleep(0)
 
-def show_settings_screen(screen, mutation_rate, game_difficulty, font, large_font):
+
+async def show_settings_screen(screen, mutation_rate, game_difficulty, font, large_font):
     settings_running = True
     
     settings = [
@@ -204,6 +207,7 @@ def show_settings_screen(screen, mutation_rate, game_difficulty, font, large_fon
                     settings_running = False
         
         clock.tick(30)
+        await asyncio.sleep(0)
     
     # Return updated settings
     mutation_rate = settings[0]["value"]

@@ -222,6 +222,7 @@ def reset_game():
 
 async def main():
     global generation, enemies_defeated, current_enemies, mutation_rate, game_difficulty
+    mutation_rate, game_difficulty   = await show_main_menu(screen, mutation_rate, game_difficulty, font, large_font)
 
     running = True
     game_state = "playing"
@@ -346,5 +347,4 @@ async def main():
 
 if __name__ == "__main__":
     # Show the main menu, then run the async game loop.
-    show_main_menu(screen, mutation_rate, game_difficulty, font, large_font)
     asyncio.run(main())
