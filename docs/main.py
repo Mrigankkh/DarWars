@@ -300,7 +300,7 @@ async def main():
             # If an enemy was selected, draw its info.
             if selected_enemy and selected_enemy.alive:
                 mouse_pos = pygame.mouse.get_pos()
-                show_enemy_info(screen, selected_enemy, mouse_pos, font)
+                await show_enemy_info(screen, selected_enemy, mouse_pos, font)
 
             # Overlay game info.
             show_info_overlay(screen, player, enemies, font, generation)
@@ -319,7 +319,7 @@ async def main():
                 for enemy in enemies:
                     enemy.calculate_fitness()
 
-                if show_generation_summary(screen, enemies, font, large_font, generation, enemies_defeated, mutation_rate, game_difficulty):
+                if await show_generation_summary(screen, enemies, font, large_font, generation, enemies_defeated, mutation_rate, game_difficulty):
                     enemies = evolve_population(enemies, population_size, mutation_rate)
                     generation += 1
                     enemies_defeated += current_enemies
