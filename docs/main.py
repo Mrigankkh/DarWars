@@ -317,8 +317,11 @@ async def main():
 
             if not alive_enemies:
                 for enemy in enemies:
-                    enemy.calculate_fitness()
-
+                    try:
+                        enemy.calculate_fitness()
+                    except Exception as e:
+                        print("fitness crash:", e)
+                 
                 if await show_generation_summary(screen, enemies, font, large_font, generation, enemies_defeated, mutation_rate, game_difficulty):
                     enemies = evolve_population(enemies, population_size, mutation_rate)
                     generation += 1
