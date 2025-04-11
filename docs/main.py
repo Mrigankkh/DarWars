@@ -148,7 +148,7 @@ async def main():
                     enemy.calculate_fitness()
                 
                 # Move to next generation
-                if show_generation_summary(screen, enemies, font, large_font, generation, enemies_defeated, mutation_rate, game_difficulty):
+                if await show_generation_summary(screen, enemies, font, large_font, generation, enemies_defeated, mutation_rate, game_difficulty):
                     # Evolve population
                     enemies = evolve_population(enemies, population_size, mutation_rate)
                     
@@ -162,13 +162,13 @@ async def main():
             
             # Update display
             pygame.display.flip()
-            #clock.tick(FPS)
+            clock.tick(FPS)
             await asyncio.sleep(0.008)
             #clock.tick(FPS)
         
         elif game_state == "game_over":
             # Show game over screen
-            if show_game_over(screen, False, font, large_font, generation, enemies_defeated):
+            if await show_game_over(screen, False, font, large_font, generation, enemies_defeated):
                 # Reset game
                 game_state = "playing"
                 player = Player(screen)
