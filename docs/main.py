@@ -194,13 +194,16 @@ from ui import (
 )
 from menu import show_main_menu, show_help_screen, show_settings_screen
 
+# Initialize pygame and set up the screen.
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Adaptive Enemy AI - Genetic Algorithm")
 
+# Set up fonts.
 font = pygame.font.SysFont('Arial', 16)
 large_font = pygame.font.SysFont('Arial', 20)
 
+# Global game variables.
 generation = 1
 population_size = 10
 current_enemies = 0
@@ -225,6 +228,7 @@ async def main():
 
     clock = pygame.time.Clock()
 
+    # Initialize player and enemies.
     player = Player(screen)
     enemies = [Enemy(screen) for _ in range(population_size)]
     current_enemies = len(enemies)
@@ -233,10 +237,12 @@ async def main():
     special_message = ""
     special_message_time = 0
 
+    # Main game loop.
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 for enemy in enemies:
@@ -247,6 +253,7 @@ async def main():
                         break
                 else:
                     selected_enemy = None
+
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
@@ -260,10 +267,13 @@ async def main():
                     game_difficulty = max(1, game_difficulty - 1)
 
         if game_state == "playing":
+            # Clear the screen.
             screen.fill(BLACK)
 
+            # Process keyboard input.
             keys = pygame.key.get_pressed()
 
+            # Update player actions.
             player.move(keys)
             player.shoot(keys)
             player.update_bullets(enemies)
@@ -277,6 +287,7 @@ async def main():
             player.update_special_weapon()
             player.draw()
 
+            # Update enemies.
             alive_enemies = [enemy for enemy in enemies if enemy.alive]
             for enemy in alive_enemies:
                 enemy.time_alive += 1
@@ -285,17 +296,21 @@ async def main():
                 enemy.update_bullets(player)
                 enemy.draw()
 
+            # If an enemy was selected, draw its info.
             if selected_enemy and selected_enemy.alive:
                 mouse_pos = pygame.mouse.get_pos()
                 show_enemy_info(screen, selected_enemy, mouse_pos, font)
 
+            # Overlay game info.
             show_info_overlay(screen, player, enemies, font, generation)
 
+            # Show a special weapon message if active.
             if special_message_time > 0:
                 message_text = font.render(special_message, True, YELLOW)
                 screen.blit(message_text, (SCREEN_WIDTH // 2 - message_text.get_width() // 2, 100))
                 special_message_time -= 1
 
+            # Update game state.
             if not player.alive:
                 game_state = "game_over"
 
@@ -310,8 +325,11 @@ async def main():
                     current_enemies = len(enemies)
                     player = Player(screen)
 
+            # Update the display.
             pygame.display.flip()
-            await asyncio.sleep(0)  # Yield to browser
+            # Yield control to allow the browser to process events.
+            await asyncio.sleep(0)
+            # Frame rate control.
             clock.tick(FPS)
 
         elif game_state == "game_over":
@@ -327,5 +345,6 @@ async def main():
     pygame.quit()
 
 if __name__ == "__main__":
+    # Show the main menu, then run the async game loop.
     show_main_menu(screen, mutation_rate, game_difficulty, font, large_font)
     asyncio.run(main())
