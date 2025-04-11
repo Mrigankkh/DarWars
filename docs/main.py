@@ -162,7 +162,7 @@ async def main():
             
             # Update display
             pygame.display.flip()
-            clock.tick(FPS)
+            #clock.tick(FPS)
             await asyncio.sleep(0)
             #clock.tick(FPS)
         
