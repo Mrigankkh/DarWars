@@ -1,6 +1,7 @@
 import pygame
 import sys
 from constants import *
+clock = pygame.time.Clock()
 
 def show_main_menu(screen, mutation_rate, game_difficulty, font, large_font):
     menu_running = True
